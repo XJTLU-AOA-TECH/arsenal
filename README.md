@@ -11,14 +11,25 @@ Codex skills forged in real AoA Tech work at XJTLU.
 
 ## Use a skill / 使用
 
-Copy the skill folder into your Codex skills directory:
+**Codex** — just tell Codex:
+
+> Install the skill `xipu-press` from the GitHub repo XJTLU-AOA-TECH/arsenal.
+> （跟 Codex 说：从 GitHub 仓库 XJTLU-AOA-TECH/arsenal 安装 xipu-press 这个 skill。）
+
+Codex's built-in skill-installer downloads it into `~/.codex/skills/`; it takes effect from the next turn. Public repo, no login needed.
+
+**Claude Code** — ask Claude Code to do the same, or run:
 
 ```bash
-cp -R xipu-press ~/.codex/skills/
+git clone --depth 1 https://github.com/XJTLU-AOA-TECH/arsenal.git
+cp -R arsenal/xipu-press ~/.claude/skills/
 ```
 
-Then just describe the task to Codex — the skill is picked up automatically when it matches.
-拷贝后直接向 Codex 描述任务即可，命中场景时会自动调用。
+Both tools read the same SKILL.md skill format, so the skill behaves the same in either.
+两个工具读取同一种 SKILL.md 标准格式，效果一致。
+
+**Updating / 更新**：skills do not auto-sync. To pick up a newer version, delete the old folder and install again.
+skill 不会自动同步；更新时删掉旧目录重新安装一次即可。
 
 ## Add a skill / 收录新 skill
 
