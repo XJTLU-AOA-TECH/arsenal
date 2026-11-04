@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{{POSTER TITLE}}</title>
+<style>
+  /* FDE Lab theme — xipu-press 第二主题范式。
+     色值取样自《AI领导力——当AI开始工作，你准备好了吗》v1.0（2026-10-27，22页）：
+     bg #F4F4F2 / ink #232323 / lime #D2F857 / lime-pale #F5FBD2 / olive #6D8400 /
+     bars #E4E4E2 #D8D8D6 #CCCCCC / card #EFEFED / white #FCFCFC。
+     平印纪律：无渐变、无阴影、圆角≤6px；lime 只作填充与线条，浅底强调字用 olive。 */
+  :root{
+    --bg:#F4F4F2; --ink:#232323; --ink-soft:#3A3A38; --gray-text:#6E6E6A; --eyebrow:#8A8A86;
+    --bar-1:#E4E4E2; --bar-2:#D8D8D6; --bar-3:#CCCCCC;
+    --card:#EFEFED; --card-white:#FCFCFC; --lime:#D2F857; --lime-pale:#F5FBD2; --olive:#6D8400;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  @page{size:420mm 594mm;margin:0;}
+  body{font-family:'PingFang SC','DIN Alternate','Arial',sans-serif;color:var(--ink-soft);background:#555;}
+  .poster{width:420mm;height:594mm;background:var(--bg);position:relative;overflow:hidden;padding:20mm 22mm;}
+  @media print{body{background:none;} .poster{margin:0;}}
+
+  /* 背景几何：斜向灰条，仅封面/分节/poster 顶部 */
+  .geo{position:absolute;inset:0;pointer-events:none;clip-path:inset(0 0 60% 0);}
+  .geo i{position:absolute;display:block;transform:rotate(-24deg);}
+  .geo .b1{width:340mm;height:30mm;background:var(--bar-1);top:40mm;right:-60mm;}
+  .geo .b2{width:340mm;height:22mm;background:var(--bar-2);top:78mm;right:-90mm;}
+  .geo .b3{width:340mm;height:30mm;background:var(--bar-3);top:110mm;right:-50mm;}
+  .geo .b4{width:340mm;height:12mm;background:var(--bar-1);top:146mm;right:-110mm;}
+  .tri{position:absolute;top:24mm;right:28mm;width:56mm;height:auto;}
+
+  .eyebrow-row{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;
+               font-family:'DIN Alternate','Arial',sans-serif;font-size:13pt;letter-spacing:.18em;
+               text-transform:uppercase;color:var(--eyebrow);}
+  .dash{display:inline-block;width:14mm;height:2.2mm;background:var(--lime);vertical-align:middle;margin-right:5mm;}
+  .eyebrow-row .r .dash{margin:0 0 0 5mm;}
+
+  .title-block{position:relative;z-index:2;margin-top:16mm;}
+  .title-block h1{font-size:96pt;line-height:1.06;font-weight:800;color:var(--ink);letter-spacing:-.01em;}
+  /* 主标题通常两行堆叠：第一行模式名，第二行中文强调段（accent），避免与右上三角相碰 */
+  .title-block h1 .accent{color:var(--olive);}
+  .rule{width:56mm;height:4mm;background:var(--lime);margin:9mm 0 7mm;}
+  .sub{font-size:26pt;line-height:1.42;color:var(--gray-text);max-width:300mm;font-weight:400;}
+
+  .grid{position:relative;z-index:2;display:flex;gap:12mm;margin-top:14mm;}
+  .col-main{flex:7;display:flex;flex-direction:column;gap:8mm;min-width:0;}
+  .col-rail{flex:5;display:flex;flex-direction:column;gap:8mm;min-width:0;}
+
+  .card{background:var(--card);border-radius:6px;padding:8mm 9mm;}
+  .card.white{background:var(--card-white);}
+  .card.hl{background:var(--lime-pale);border:1.5px solid var(--lime);}
+  .card h3{font-size:24pt;font-weight:700;color:var(--ink);margin-bottom:5mm;display:flex;align-items:baseline;gap:4mm;}
+  .card h3 .k{font-family:'DIN Alternate','Arial',sans-serif;font-size:12pt;letter-spacing:.18em;color:var(--gray-text);font-weight:600;text-transform:uppercase;}
+  .card p{font-size:16pt;line-height:1.55;}
+  .card p + p{margin-top:3mm;}
+  .card .em{color:var(--olive);font-weight:700;}
+
+  ol.steps{list-style:none;counter-reset:s;}
+  ol.steps li{counter-increment:s;position:relative;padding-left:15mm;margin-bottom:4.5mm;font-size:16pt;line-height:1.5;}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:.8mm;width:9.5mm;height:9.5mm;border-radius:50%;
+                      background:var(--ink);color:#fff;font-size:14pt;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  ol.steps li b{color:var(--ink);}
+
+  ul.dots{list-style:none;}
+  ul.dots li{position:relative;padding-left:13mm;margin-bottom:4.5mm;font-size:16pt;line-height:1.5;}
+  ul.dots li::before{content:attr(data-n);position:absolute;left:0;top:.6mm;width:9mm;height:9mm;border-radius:50%;
+                     background:var(--lime);color:var(--ink);font-size:14pt;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  ul.dots li b{color:var(--ink);}
+
+  .rail{background:var(--card);border-left:3mm solid var(--lime);border-radius:0 6px 6px 0;padding:8mm 9mm;flex:1;}
+  .rail h4{font-size:22pt;font-weight:700;color:var(--ink);margin-bottom:5mm;}
+  .rail .blk + h4{margin-top:8mm;}
+  .statrow{display:flex;gap:8mm;margin-top:2mm;}
+  .stat{flex:1;border-top:2mm solid var(--lime);padding-top:3mm;}
+  .stat .n{font-family:'DIN Alternate','Arial',sans-serif;font-size:40pt;font-weight:800;color:var(--ink);line-height:1;}
+  .stat .l{font-size:13pt;color:var(--gray-text);margin-top:2mm;line-height:1.35;}
+
+  table.tbl{width:100%;border-collapse:collapse;margin-top:2mm;}
+  table.tbl th{background:var(--ink);color:#fff;font-size:14pt;text-align:left;padding:2.6mm 3mm;font-weight:600;}
+  table.tbl td{font-size:15pt;line-height:1.4;padding:2.6mm 3mm;border-bottom:.4mm solid #DEDEDC;vertical-align:top;}
+  table.tbl tr:nth-child(even) td{background:#F0F0EE;}
+  table.tbl td.n{font-family:'DIN Alternate','Arial',sans-serif;font-weight:700;color:var(--ink);white-space:nowrap;}
+
+  .keybar{position:relative;z-index:2;background:var(--ink);color:#fff;font-size:24pt;font-weight:700;line-height:1.42;
+          padding:8mm 10mm;border-radius:6px;margin-top:10mm;}
+  .keybar .hl{color:var(--lime);}
+
+  .foot{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;margin-top:8mm;gap:12mm;}
+  .foot .src{font-size:12pt;line-height:1.5;color:var(--gray-text);max-width:250mm;}
+  .foot img{height:26mm;width:auto;display:block;}
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="geo"><i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i></div>
+  <!-- 封面符号：lime 描边三角，内联 SVG，不用位图 -->
+  <svg class="tri" viewBox="0 0 100 88" aria-hidden="true">
+    <path d="M6 4 L94 44 L6 84 Z" fill="none" stroke="#D2F857" stroke-width="10" stroke-linejoin="miter"/>
+  </svg>
+
+  <div class="eyebrow-row">
+    <span class="l"><i class="dash"></i>{{EYEBROW LEFT · 全大写小标签}}</span>
+    <span class="r">{{EYEBROW RIGHT · 版本/日期}}<i class="dash"></i></span>
+  </div>
+
+  <header class="title-block">
+    <h1>{{主标题前半}}<span class="accent">{{主标题强调段}}</span></h1>
+    <div class="rule"></div>
+    <p class="sub">{{一句话副标题：这套东西是什么、一个项目同时产出什么}}</p>
+  </header>
+
+  <main class="grid">
+    <section class="col-main">
+
+      <div class="card">
+        <h3><span class="k">Role</span>{{卡片一标题}}</h3>
+        <p>{{角色三个动作；位置在跑道边；判据一条}}</p>
+      </div>
+
+      <div class="card white">
+        <h3><span class="k">How</span>{{卡片二标题}}</h3>
+        <ol class="steps">
+          <li><b>{{步骤}}</b>{{一句}}</li>
+          <li><b>{{步骤}}</b>{{一句}}</li>
+          <li><b>{{步骤}}</b>{{一句}}</li>
+          <li><b>{{步骤}}</b>{{一句}}</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3><span class="k">Scope</span>{{卡片三标题}}</h3>
+        <p>{{承担什么，一句}}</p>
+        <p class="em">{{不承担什么，三类各一句}}</p>
+      </div>
+
+      <div class="card hl">
+        <h3><span class="k">Money</span>{{卡片四标题}}</h3>
+        <table class="tbl">
+          <tr><th>{{列}}</th><th>{{列}}</th><th>{{列}}</th></tr>
+          <tr><td>{{行}}</td><td>{{行}}</td><td class="n">{{金额}}</td></tr>
+          <tr><td>{{行}}</td><td>{{行}}</td><td class="n">{{金额}}</td></tr>
+        </table>
+        <p>{{现金与人力分开报的一句}}</p>
+      </div>
+
+    </section>
+
+    <aside class="col-rail">
+      <div class="rail">
+        <h4>{{右栏标题一}}</h4>
+        <div class="statrow">
+          <div class="stat"><div class="n">{{数}}</div><div class="l">{{说明}}</div></div>
+          <div class="stat"><div class="n">{{数}}</div><div class="l">{{说明}}</div></div>
+        </div>
+        <div class="blk"></div>
+        <h4>{{右栏标题二}}</h4>
+        <ul class="dots">
+          <li data-n="1"><b>{{事项}}</b>{{一句}}</li>
+          <li data-n="2"><b>{{事项}}</b>{{一句}}</li>
+          <li data-n="3"><b>{{事项}}</b>{{一句}}</li>
+        </ul>
+        <div class="blk"></div>
+        <h4>{{右栏标题三}}</h4>
+        <ul class="dots">
+          <li data-n="✓">{{判据一句}}</li>
+          <li data-n="✓">{{判据一句}}</li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+
+  <div class="keybar">{{全篇最重要的一句话，强调段用 <span class="hl">lime</span>}}</div>
+
+  <footer class="foot">
+    <div class="src">{{来源与状态小字：版本、日期、草案状态、授权前提}}</div>
+    <!-- logo 位图随 HTML 一起存放，相对路径引用 -->
+    <img src="fde-lab-logo.png" alt="FDE Lab — Think. Build. Impact.">
+  </footer>
+
+</div>
+</body>
+</html>
